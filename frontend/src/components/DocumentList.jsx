@@ -1,4 +1,4 @@
-import { getDownloadUrl } from '../services/documentService';
+import DownloadButton from './DownloadButton';
 
 function formatSize(size) {
   if (size < 1024) return `${size} B`;
@@ -19,7 +19,7 @@ export default function DocumentList({ documents, isLoading, error, onRetry }) {
             <strong>{document.originalName}</strong>
             <span>{document.owner} · {formatSize(document.size)}</span>
           </div>
-          <a href={getDownloadUrl(document.id)}>Baixar</a>
+          <DownloadButton documentId={document.id} fileName={document.originalName} />
         </article>
       ))}
     </div>

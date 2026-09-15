@@ -1,3 +1,5 @@
+const API_PREFIX = '/api';
+
 async function parseResponse(response) {
   if (!response.ok) {
     const body = await response.json().catch(() => ({}));
@@ -8,7 +10,7 @@ async function parseResponse(response) {
 }
 
 export async function listDocuments() {
-  const response = await fetch('/api/documents');
+  const response = await fetch(`${API_PREFIX}/documents`);
   const body = await parseResponse(response);
   return body.documents;
 }
@@ -18,10 +20,17 @@ export async function uploadDocument(file, owner) {
   formData.append('file', file);
   formData.append('owner', owner);
 
-  const response = await fetch('/api/upload', { method: 'POST', body: formData });
+  const response = await fetch(`${API_PREFIX}/upload`, { method: 'POST', body: formData });
   return parseResponse(response);
 }
 
-export function getDownloadUrl(documentId) {
-  return `/api/documents/${encodeURIComponent(documentId)}/download`;
+export async function downloadDocument(documentId) {
+  const response = await fetch(`${API_PREFIX}/documents/${encodeURIComponent(documentId)}/download`);
+
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new Error(body.error || 'Não foi possível baixar o documento.');
+  }
+
+  return response.blob();
 }
