@@ -26,9 +26,11 @@ async function request(pathname, options) {
   return { response, body: await response.arrayBuffer() };
 }
 
-test('o app expõe health check e fluxo de documento', async () => {
+test('o app expõe health check', async () => {
   assert.strictEqual((await request('/health')).response.status, 200);
+});
 
+test('envia um documento e retorna seus metadados públicos', async () => {
   const form = new FormData();
   form.append('owner', 'user-123');
   form.append('file', new Blob(['conteudo'], { type: 'text/plain' }), 'nota.txt');
@@ -38,15 +40,32 @@ test('o app expõe health check e fluxo de documento', async () => {
   assert.strictEqual(document.originalName, 'nota.txt');
   assert.strictEqual(document.owner, 'user-123');
   assert.ok(!('storagePath' in document));
+});
+
+test('lista os documentos enviados', async () => {
+  const form = new FormData();
+  form.append('owner', 'user-456');
+  form.append('file', new Blob(['conteudo da lista'], { type: 'text/plain' }), 'lista.txt');
+  const upload = await request('/upload', { method: 'POST', body: form });
+  const document = JSON.parse(Buffer.from(upload.body).toString());
 
   const list = await request('/documents');
   assert.strictEqual(list.response.status, 200);
-  assert.strictEqual(JSON.parse(Buffer.from(list.body).toString()).documents.length, 1);
+  const documents = JSON.parse(Buffer.from(list.body).toString()).documents;
+  assert.ok(documents.some((listedDocument) => listedDocument.id === document.id));
+});
+
+test('baixa o conteúdo de um documento enviado', async () => {
+  const form = new FormData();
+  form.append('owner', 'user-789');
+  form.append('file', new Blob(['conteudo para download'], { type: 'text/plain' }), 'download.txt');
+  const upload = await request('/upload', { method: 'POST', body: form });
+  const document = JSON.parse(Buffer.from(upload.body).toString());
 
   const download = await request(`/documents/${document.id}/download`);
   assert.strictEqual(download.response.status, 200);
   assert.strictEqual(download.response.headers.get('content-type'), 'text/plain');
-  assert.strictEqual(Buffer.from(download.body).toString(), 'conteudo');
+  assert.strictEqual(Buffer.from(download.body).toString(), 'conteudo para download');
 });
 
 test('rejeita proprietário ausente ou maior que o limite', async () => {
