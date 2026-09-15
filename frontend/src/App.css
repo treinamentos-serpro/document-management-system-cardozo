@@ -1,0 +1,26 @@
+:root { color: #1f2933; background: #f4f1ea; font-family: Georgia, 'Times New Roman', serif; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { min-height: 100vh; padding: 3rem 1.25rem; }
+.shell { max-width: 920px; margin: 0 auto; }
+.eyebrow { color: #a44a2c; font: 700 0.75rem/1.2 Arial, sans-serif; letter-spacing: 0.12em; text-transform: uppercase; }
+h1 { max-width: 650px; margin: 0.5rem 0 0.75rem; font-size: clamp(2.4rem, 7vw, 5.5rem); line-height: 0.95; font-weight: 500; }
+.intro { max-width: 560px; color: #59636e; font: 1.05rem/1.5 Arial, sans-serif; }
+.workspace { display: grid; grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr); gap: 1.5rem; margin-top: 3rem; }
+.panel { padding: 1.25rem; border: 1px solid #d8d0c4; background: rgba(255, 253, 248, 0.72); }
+.panel h2 { margin-top: 0; font-size: 1.35rem; font-weight: 500; }
+.upload-form { display: grid; gap: 0.65rem; font-family: Arial, sans-serif; }
+label { color: #59636e; font-size: 0.85rem; }
+input { width: 100%; padding: 0.7rem; border: 1px solid #c9c0b4; background: #fffdf8; font: inherit; }
+button, .document-row a { display: inline-block; width: fit-content; padding: 0.7rem 0.9rem; border: 0; background: #a44a2c; color: #fffdf8; cursor: pointer; font: 700 0.85rem Arial, sans-serif; text-decoration: none; }
+button:disabled { cursor: wait; opacity: 0.65; }
+.status { margin: 0; font: 0.85rem/1.4 Arial, sans-serif; }
+.status.success { color: #26734d; }
+.status.error { color: #a52c2c; }
+.document-list { display: grid; gap: 0.65rem; }
+.document-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid #ded7cd; }
+.document-row div { min-width: 0; }
+.document-row strong, .document-row span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.document-row span { margin-top: 0.25rem; color: #6d747b; font: 0.8rem Arial, sans-serif; }
+.empty-state { color: #6d747b; font: 0.9rem/1.4 Arial, sans-serif; }
+@media (max-width: 680px) { main { padding-top: 2rem; } .workspace { grid-template-columns: 1fr; margin-top: 2rem; } }
